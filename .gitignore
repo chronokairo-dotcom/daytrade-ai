@@ -17,13 +17,20 @@ auth-profiles.json
 data/raw/
 data/cache/
 *.parquet
-*.csv
+# OHLCV CSVs (but keep test fixtures)
+data/**/*.csv
 
 # logs / artifacts
 logs/
 *.log
 backtest-results/
 .ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
 
 # os
 .DS_Store
