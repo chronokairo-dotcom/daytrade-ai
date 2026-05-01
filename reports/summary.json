@@ -1,0 +1,191 @@
+{
+  "generated_at": "2026-05-01T03:55:49.379390+00:00",
+  "results": [
+    {
+      "kind": "backtest",
+      "symbol": "BTC/USDT",
+      "strategy": "sma_cross",
+      "metrics": {
+        "total_return": -0.6255926928143245,
+        "cagr": -0.25536013199393837,
+        "sharpe": -0.7349996174789191,
+        "sortino": -1.0575044649868244,
+        "calmar": -0.34060130086632723,
+        "max_drawdown": -0.7497332844719735,
+        "win_rate": 0.2991596638655462,
+        "profit_factor": 0.9826749260178335,
+        "expectancy": -1.3379045545157595,
+        "n_trades": 595.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "BTC/USDT",
+      "strategy": "sma_cross",
+      "aggregate": {
+        "mean_sharpe": -0.966610770797045,
+        "median_sharpe": -1.107580315710527,
+        "mean_total_return": -0.08143526079877177,
+        "mean_max_drawdown": -0.20306138589744077,
+        "win_folds": 1.0,
+        "total_folds": 5.0
+      }
+    },
+    {
+      "kind": "backtest",
+      "symbol": "BTC/USDT",
+      "strategy": "rsi_mean_reversion",
+      "metrics": {
+        "total_return": -0.39725622727149923,
+        "cagr": -0.14096582698806726,
+        "sharpe": -0.5023421794991726,
+        "sortino": -0.683221847025493,
+        "calmar": -0.3217280320058191,
+        "max_drawdown": -0.43815214393726687,
+        "win_rate": 0.601123595505618,
+        "profit_factor": 0.843461435267247,
+        "expectancy": -14.116748860013104,
+        "n_trades": 178.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "BTC/USDT",
+      "strategy": "rsi_mean_reversion",
+      "aggregate": {
+        "mean_sharpe": -0.9632395098078806,
+        "median_sharpe": -0.8598707943471083,
+        "mean_total_return": -0.07453560014763372,
+        "mean_max_drawdown": -0.13984454816578445,
+        "win_folds": 0.0,
+        "total_folds": 5.0
+      }
+    },
+    {
+      "kind": "backtest",
+      "symbol": "BTC/USDT",
+      "strategy": "momentum",
+      "metrics": {
+        "total_return": -0.9696893273578318,
+        "cagr": -0.6498325437284653,
+        "sharpe": -3.0071897767077753,
+        "sortino": -4.385201971237785,
+        "calmar": -0.6637049977397378,
+        "max_drawdown": -0.9790984638378265,
+        "win_rate": 0.2063686466625842,
+        "profit_factor": 0.9146150714222756,
+        "expectancy": -1.6219464432015762,
+        "n_trades": 1633.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "BTC/USDT",
+      "strategy": "momentum",
+      "aggregate": {
+        "mean_sharpe": -3.700622642940084,
+        "median_sharpe": -2.8874576662663873,
+        "mean_total_return": -0.3037025552233795,
+        "mean_max_drawdown": -0.34414577452846545,
+        "win_folds": 0.0,
+        "total_folds": 5.0
+      }
+    },
+    {
+      "kind": "backtest",
+      "symbol": "ETH/USDT",
+      "strategy": "sma_cross",
+      "metrics": {
+        "total_return": -0.7608281331361868,
+        "cagr": -0.3490764106603649,
+        "sharpe": -0.8070524379896753,
+        "sortino": -1.174461529751063,
+        "calmar": -0.41796880430340183,
+        "max_drawdown": -0.8351733599883013,
+        "win_rate": 0.3069139966273187,
+        "profit_factor": 0.9201029605600697,
+        "expectancy": -5.911532496799509,
+        "n_trades": 593.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "ETH/USDT",
+      "strategy": "sma_cross",
+      "aggregate": {
+        "mean_sharpe": -0.5326276482530892,
+        "median_sharpe": -0.4985157938484365,
+        "mean_total_return": 0.05308647195628065,
+        "mean_max_drawdown": -0.24813609250215754,
+        "win_folds": 2.0,
+        "total_folds": 5.0
+      }
+    },
+    {
+      "kind": "backtest",
+      "symbol": "ETH/USDT",
+      "strategy": "rsi_mean_reversion",
+      "metrics": {
+        "total_return": -0.5431680377594237,
+        "cagr": -0.2095371192093647,
+        "sharpe": -0.5001931682924151,
+        "sortino": -0.6634604534126993,
+        "calmar": -0.30692924431888624,
+        "max_drawdown": -0.6826886752819965,
+        "win_rate": 0.6162162162162163,
+        "profit_factor": 0.8313633749508708,
+        "expectancy": -20.94572778561927,
+        "n_trades": 185.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "ETH/USDT",
+      "strategy": "rsi_mean_reversion",
+      "aggregate": {
+        "mean_sharpe": -0.6386022837368556,
+        "median_sharpe": -0.16682616444670895,
+        "mean_total_return": -0.08597919836718973,
+        "mean_max_drawdown": -0.2138013175234724,
+        "win_folds": 1.0,
+        "total_folds": 5.0
+      }
+    },
+    {
+      "kind": "backtest",
+      "symbol": "ETH/USDT",
+      "strategy": "momentum",
+      "metrics": {
+        "total_return": -0.9628828466324657,
+        "cagr": -0.6278814985371732,
+        "sharpe": -2.126481424667055,
+        "sortino": -3.1633290509893683,
+        "calmar": -0.6421755543843811,
+        "max_drawdown": -0.9777412021531856,
+        "win_rate": 0.23447401774397972,
+        "profit_factor": 0.8699708512235517,
+        "expectancy": -2.428912128749449,
+        "n_trades": 1578.0,
+        "n_bars": 29187.0
+      }
+    },
+    {
+      "kind": "walk_forward",
+      "symbol": "ETH/USDT",
+      "strategy": "momentum",
+      "aggregate": {
+        "mean_sharpe": -1.9891584529252024,
+        "median_sharpe": -1.0091158108463916,
+        "mean_total_return": -0.14984115852099367,
+        "mean_max_drawdown": -0.3460963767323023,
+        "win_folds": 1.0,
+        "total_folds": 5.0
+      }
+    }
+  ]
+}
