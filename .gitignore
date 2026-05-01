@@ -1,0 +1,30 @@
+# deps
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# secrets
+.env
+.env.*
+!.env.example
+*.key
+credentials.json
+auth-profiles.json
+
+# data
+data/raw/
+data/cache/
+*.parquet
+*.csv
+
+# logs / artifacts
+logs/
+*.log
+backtest-results/
+.ipynb_checkpoints/
+
+# os
+.DS_Store
+Thumbs.db
