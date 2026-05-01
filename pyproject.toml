@@ -1,0 +1,101 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "daytrade-ai"
+version = "0.0.1"
+description = "Honest-by-default crypto/equities day-trade research toolkit. Paper trading only."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Laciels", email = "laciels@chronokairo.local" }]
+keywords = ["trading", "backtest", "paper-trading", "ccxt", "crypto"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "ccxt>=4.0",
+    "pydantic>=2.5",
+    "pydantic-settings>=2.1",
+    "typer>=0.9",
+    "python-dotenv>=1.0",
+    "pyarrow>=14.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.5",
+    "mypy>=1.8",
+    "pandas-stubs",
+    "types-python-dateutil",
+    "pre-commit>=3.5",
+]
+extras = [
+    "vectorbt",
+    "matplotlib",
+]
+
+[project.scripts]
+daytrade-ai = "daytrade_ai.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/chronokairo-dotcom/daytrade-ai"
+Issues = "https://github.com/chronokairo-dotcom/daytrade-ai/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+daytrade_ai = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF",
+]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+warn_return_any = true
+ignore_missing_imports = true
+files = ["src"]
+
+[[tool.mypy.overrides]]
+module = "ccxt.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
