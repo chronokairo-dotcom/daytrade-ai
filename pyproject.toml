@@ -44,6 +44,10 @@ extras = [
     "vectorbt",
     "matplotlib",
 ]
+analysis = [
+    # Reserved for future analysis-only deps (statsmodels, scipy, etc.).
+    # Currently no extra deps required; pure pandas/numpy.
+]
 
 [project.scripts]
 daytrade-ai = "daytrade_ai.cli:app"
@@ -71,6 +75,8 @@ ignore = ["E501", "B008"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E402"]
+"scripts/*" = ["RUF001", "RUF002"]
+"src/daytrade_ai/analysis/patterns.py" = ["RUF001"]
 
 [tool.ruff.format]
 quote-style = "double"
