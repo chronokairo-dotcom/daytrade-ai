@@ -115,9 +115,7 @@ def main() -> int:
 
     out = ROOT / "reports" / "summary.json"
     out.write_text(
-        json.dumps(
-            {"generated_at": datetime.now(tz=UTC).isoformat(), "results": summary}, indent=2
-        )
+        json.dumps({"generated_at": datetime.now(tz=UTC).isoformat(), "results": summary}, indent=2)
     )
     print(f"\nWrote {out.relative_to(ROOT)}")
     return 0

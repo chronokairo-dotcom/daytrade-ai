@@ -88,7 +88,9 @@ def backtest(
     initial_cash: float | None = typer.Option(None, "--initial-cash"),
     output_dir: Path = typer.Option(Path("backtest-results"), "--output-dir"),
     output_md: Path | None = typer.Option(
-        None, "--output-md", help="Write markdown report to this exact path (in addition to output-dir)."
+        None,
+        "--output-md",
+        help="Write markdown report to this exact path (in addition to output-dir).",
     ),
 ) -> None:
     """Run a backtest and write a report."""

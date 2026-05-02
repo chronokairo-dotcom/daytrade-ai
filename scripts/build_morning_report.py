@@ -53,12 +53,8 @@ def main() -> int:
     n_pos = sum(1 for r in wf_rows if r["aggregate"].get("median_sharpe", 0) > 0)
     lines.append("## TL;DR")
     lines.append("")
-    lines.append(
-        f"- {len(wf_rows)} (symbol × strategy) walk-forward runs completed."
-    )
-    lines.append(
-        f"- **{n_pos}** had positive median Sharpe; **{n_neg}** had negative or zero."
-    )
+    lines.append(f"- {len(wf_rows)} (symbol × strategy) walk-forward runs completed.")
+    lines.append(f"- **{n_pos}** had positive median Sharpe; **{n_neg}** had negative or zero.")
     if n_pos == 0:
         lines.append(
             "- **Verdict: no edge detected.** Every bundled strategy lost money on out-of-sample folds for both BTC/USDT and ETH/USDT."

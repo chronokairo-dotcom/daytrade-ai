@@ -101,11 +101,7 @@ def _classify_candles(df: pd.DataFrame) -> pd.DataFrame:
     doji = (body / rng) < 0.1
 
     # Hammer: small body at top of range, long lower wick.
-    hammer = (
-        (body / rng < 0.35)
-        & (lower_wick / rng > 0.5)
-        & (upper_wick / rng < 0.2)
-    )
+    hammer = (body / rng < 0.35) & (lower_wick / rng > 0.5) & (upper_wick / rng < 0.2)
 
     prev_o = o.shift(1)
     prev_c = c.shift(1)
@@ -118,13 +114,7 @@ def _classify_candles(df: pd.DataFrame) -> pd.DataFrame:
         & (o <= prev_c)
         & (body > prev_body)
     )
-    bear_engulf = (
-        (prev_c > prev_o)
-        & (c < o)
-        & (c <= prev_o)
-        & (o >= prev_c)
-        & (body > prev_body)
-    )
+    bear_engulf = (prev_c > prev_o) & (c < o) & (c <= prev_o) & (o >= prev_c) & (body > prev_body)
 
     return pd.DataFrame(
         {
@@ -213,9 +203,7 @@ def analyze_patterns(
     sma50 = _sma(close, 50)
     sma200 = _sma(close, 200)
     last_sma50 = float(sma50.iloc[-1]) if not np.isnan(sma50.iloc[-1]) else float(close.iloc[-1])
-    last_sma200 = (
-        float(sma200.iloc[-1]) if not np.isnan(sma200.iloc[-1]) else float(close.iloc[-1])
-    )
+    last_sma200 = float(sma200.iloc[-1]) if not np.isnan(sma200.iloc[-1]) else float(close.iloc[-1])
     if last_sma50 > last_sma200 * 1.005:
         trend = "uptrend"
     elif last_sma50 < last_sma200 * 0.995:

@@ -58,7 +58,14 @@ def test_render_markdown_contains_sections() -> None:
     df = _synth_df()
     rep = analyze_patterns(df, symbol="X/USDT", timeframe="1h")
     md = render_markdown(rep)
-    for section in ("## Trend", "## Volatility", "## Momentum", "## Mean reversion", "## Range", "## Candles"):
+    for section in (
+        "## Trend",
+        "## Volatility",
+        "## Momentum",
+        "## Mean reversion",
+        "## Range",
+        "## Candles",
+    ):
         assert section in md
     assert "X/USDT" in md
 
