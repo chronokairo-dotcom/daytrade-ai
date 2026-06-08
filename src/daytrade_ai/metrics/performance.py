@@ -1,5 +1,3 @@
-"""Performance metrics: sharpe, sortino, calmar, max drawdown, win rate, etc."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -11,13 +9,56 @@ if TYPE_CHECKING:
     from daytrade_ai.backtest.portfolio import Trade
 
 
-class PerformanceMetrics:
-    """Compute performance metrics from an equity curve + trades list."""
+def bootstrap_sharpe_ci(
+    fold_sharpes: np.ndarray,
+    n_resamples: int = 2000,
+    ci_level: float = 0.95,
+    seed: int | None = None,
+) -> tuple[float, float]:
+    if len(fold_sharpes) < 2:
+        m = float(fold_sharpes.mean()) if len(fold_sharpes) else 0.0
+        return (m, m)
+    rng = np.random.default_rng(seed)
+    boot_means = np.empty(n_resamples)
+    for i in range(n_resamples):
+        idx = rng.integers(0, len(fold_sharpes), size=len(fold_sharpes))
+        boot_means[i] = fold_sharpes[idx].mean()
+    alpha = (1.0 - ci_level) / 2.0
+    lo = float(np.percentile(boot_means, alpha * 100))
+    hi = float(np.percentile(boot_means, (1.0 - alpha) * 100))
+    return (lo, hi)
 
+
+def permutation_sharpe_test(
+    returns: pd.Series,
+    n_permutations: int = 2000,
+    seed: int | None = None,
+) -> float:
+    rng = np.random.default_rng(seed)
+    arr = returns.to_numpy(dtype=float)
+    obs_sharpe = _compute_sharpe(arr)
+    count = 0
+    for _ in range(n_permutations):
+        rng.shuffle(arr)
+        perm_sharpe = _compute_sharpe(arr)
+        if perm_sharpe >= obs_sharpe:
+            count += 1
+    return (count + 1) / (n_permutations + 1)
+
+
+def _compute_sharpe(arr: np.ndarray, bars_per_year: float = 365.0 * 24.0) -> float:
+    if arr.size == 0:
+        return 0.0
+    std = float(arr.std(ddof=0))
+    if std == 0.0:
+        return 0.0
+    return float(arr.mean() / std * np.sqrt(bars_per_year))
+
+
+class PerformanceMetrics:
     def __init__(self, bars_per_year: float = 365.0 * 24.0) -> None:
         self.bars_per_year = bars_per_year
 
-    # ------------------------------------------------------------------
     def compute(
         self,
         equity_curve: pd.Series,
@@ -72,7 +113,6 @@ class PerformanceMetrics:
             "n_bars": float(n_bars),
         }
 
-    # ------------------------------------------------------------------
     def _sharpe(self, returns: pd.Series) -> float:
         if returns.empty:
             return 0.0

@@ -27,9 +27,14 @@ class Settings(BaseSettings):
     default_symbol: str = "BTC/USDT"
     default_timeframe: str = "1h"
 
-    fee_bps: float = 10.0  # 0.10% per side
+    # Fee model: separate maker (limit order) / taker (market order) bps
+    maker_fee_bps: float = 1.0  # 0.01% per side — Binance VIP 0 fee-tier maker
+    taker_fee_bps: float = 10.0  # 0.10% per side — retail taker
+    use_taker_fee: bool = True  # default: all fills treated as taker (conservative)
     slippage_bps: float = 5.0  # 0.05% per fill
     initial_cash: float = 10_000.0
+
+    zero_cost_mode: bool = False  # if True, fee=0 and slippage=0 (sanity check)
 
     # Hard kill switch. Even if someone wires a LiveBroker, this must remain false.
     enable_live_trading: bool = False

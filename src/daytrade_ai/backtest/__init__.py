@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from daytrade_ai.backtest.engine import BacktestEngine, BacktestResult
 from daytrade_ai.backtest.portfolio import Portfolio, Trade
-from daytrade_ai.backtest.walk_forward import WalkForward, WalkForwardResult
+from daytrade_ai.backtest.walk_forward import WalkForward, WalkForwardResult, WindowMode
 
 __all__ = [
     "BacktestEngine",
@@ -13,4 +13,5 @@ __all__ = [
     "Trade",
     "WalkForward",
     "WalkForwardResult",
+    "WindowMode",
 ]

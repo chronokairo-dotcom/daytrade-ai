@@ -1,5 +1,3 @@
-"""Text + markdown reports for backtest results."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -8,6 +6,7 @@ import pandas as pd
 
 if TYPE_CHECKING:
     from daytrade_ai.backtest.engine import BacktestResult
+    from daytrade_ai.backtest.walk_forward import WalkForwardResult
 
 
 def ascii_equity_curve(equity: pd.Series, width: int = 60, height: int = 12) -> str:
@@ -15,7 +14,6 @@ def ascii_equity_curve(equity: pd.Series, width: int = 60, height: int = 12) -> 
         return "(empty equity curve)"
     values = equity.to_numpy(dtype=float)
     if len(values) > width:
-        # Bucket-average down to `width` columns.
         step = len(values) / width
         sampled = [
             float(values[int(i * step) : max(int((i + 1) * step), int(i * step) + 1)].mean())
@@ -96,3 +94,62 @@ def format_markdown_report(result: BacktestResult, title: str = "Backtest") -> s
         f"| metric | value |\n|---|---|\n{table}\n\n"
         "> Paper-trade for months before considering anything beyond research.\n"
     )
+
+
+def format_walk_forward_report(
+    wf_result: WalkForwardResult,
+    title: str = "Walk-forward",
+) -> str:
+    lines = [
+        f"# {title}",
+        "",
+        "## Per-fold summary",
+        "",
+        "```",
+        wf_result.summary.to_string(index=False),
+        "```",
+        "",
+        "## Aggregate",
+        "",
+    ]
+    for k, v in wf_result.aggregate.items():
+        lines.append(f"- **{k}**: {v:.4f}")
+
+    if wf_result.bootstrap_ci is not None:
+        lo, hi = wf_result.bootstrap_ci
+        lines.append(f"- **sharpe 95% CI**: ({lo:.3f}, {hi:.3f})")
+        lines.append(
+            f"- **CI includes zero?**: {'YES — no edge detected' if lo <= 0 <= hi else 'NO'}"
+        )
+
+    if wf_result.benchmark_summary is not None:
+        lines.extend(
+            [
+                "",
+                "## Benchmark (buy & hold)",
+                "",
+                "```",
+                wf_result.benchmark_summary.to_string(index=False),
+                "```",
+                "",
+                "### Strategy vs Benchmark by fold",
+                "",
+            ]
+        )
+        merged = wf_result.summary.merge(
+            wf_result.benchmark_summary,
+            on="fold",
+            suffixes=("_strat", "_bench"),
+        )
+        if not merged.empty:
+            for _, row in merged.iterrows():
+                diff = row.get("total_return_strat", 0) - row.get("total_return_bench", 0)
+                lines.append(
+                    f"- fold {int(row['fold'])}: "
+                    f"strategy={row['total_return_strat'] * 100:.2f}% "
+                    f"bench={row['total_return_bench'] * 100:.2f}% "
+                    f"Δ={diff * 100:+.2f}%"
+                )
+
+    lines.append("")
+    return "\n".join(lines)

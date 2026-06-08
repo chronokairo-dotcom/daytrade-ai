@@ -4,7 +4,12 @@ so they self-register via the @register decorator."""
 from __future__ import annotations
 
 # Side-effect imports to populate registry.
-from daytrade_ai.strategies import momentum, rsi_mean_reversion, sma_cross  # noqa: F401
+from daytrade_ai.strategies import (  # noqa: F401
+    buy_and_hold,
+    momentum,
+    rsi_mean_reversion,
+    sma_cross,
+)
 from daytrade_ai.strategies.base import Strategy, register, registry
 
 __all__ = ["Strategy", "get_strategy", "list_strategies", "register", "registry"]
