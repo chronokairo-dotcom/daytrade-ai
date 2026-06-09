@@ -52,7 +52,7 @@ def main() -> int:
             strat = get_strategy(sname)
             engine = BacktestEngine(
                 initial_cash=settings.initial_cash,
-                fee_bps=settings.fee_bps,
+                fee_bps=settings.taker_fee_bps,
                 slippage_bps=settings.slippage_bps,
             )
             res = engine.run(df, strat)

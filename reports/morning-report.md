@@ -1,6 +1,6 @@
 # daytrade-ai :: morning report
 
-_generated: 2026-06-09T17:27:43+00:00_
+_generated: 2026-06-09T17:29:06+00:00_
 
 > **PAPER ONLY.** This report describes research-grade backtests on cached
 > Binance public OHLCV data. No live orders. No claims of profitability.
