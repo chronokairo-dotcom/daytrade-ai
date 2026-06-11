@@ -1,6 +1,6 @@
 # daytrade-ai :: morning report
 
-_generated: 2026-06-11T14:04:11+00:00_
+_generated: 2026-06-11T15:42:25+00:00_
 
 > **PAPER ONLY.** This report describes research-grade backtests on cached
 > Binance public OHLCV data. No live orders. No claims of profitability.
@@ -38,11 +38,11 @@ _generated: 2026-06-11T14:04:11+00:00_
 
 ### Pattern report :: latest snapshot
 
-_generated: 2026-06-11T14:04:08+00:00_
+_generated: 2026-06-11T15:33:47+00:00_
 
 ### Pattern report :: BTC/USDT :: 1h
 
-_generated: 2026-06-11T14:04:08.077757+00:00_
+_generated: 2026-06-11T15:33:47.293345+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
@@ -91,7 +91,7 @@ _generated: 2026-06-11T14:04:08.077757+00:00_
 
 ### Pattern report :: ETH/USDT :: 1h
 
-_generated: 2026-06-11T14:04:08.100274+00:00_
+_generated: 2026-06-11T15:33:47.313367+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
@@ -140,7 +140,7 @@ _generated: 2026-06-11T14:04:08.100274+00:00_
 
 ### Pattern report :: SOL/USDT :: 1h
 
-_generated: 2026-06-11T14:04:08.121697+00:00_
+_generated: 2026-06-11T15:33:47.333678+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
@@ -188,67 +188,67 @@ _generated: 2026-06-11T14:04:08.121697+00:00_
 
 ## Urgent changes
 
-### 🔴 P0 — Stop building strategies until edge is demonstrated on a benchmark
+### 🔴 P0 — Stop building strategies until edge is demonstrated on a benchmark [✅ Fixed]
 
-**Why.** All three bundled strategies have negative median Sharpe on both BTC/USDT and ETH/USDT walk-forward (1h, 2023→2026). Adding more strategies without first proving the engine + cost model can find any positive baseline is research theatre.
+**Why.** All three bundled strategies still have negative median Sharpe across BTC/ETH.
 
-**Change.** Add a buy-and-hold benchmark in `src/daytrade_ai/strategies/buy_and_hold.py` and a relative-performance column in walk-forward summaries (`backtest/walk_forward.py`).
+**Change.** Buy-and-hold benchmark + walk-forward comparison is implemented. Verify it's wired into run_realdata_analysis.py.
 
-**Effort.** S (1–2h)
+**Effort.** S (check & wire)
 
-### 🔴 P0 — Realistic cost model audit: 10 bps fee + 5 bps slippage on 1h is borderline insane
+### 🔴 P0 — Realistic cost model audit [✅ Fixed]
 
-**Why.** Momentum strategy fires 1500+ trades over the test window and dies — most of the loss is friction. The defaults assume retail Binance maker fees, but every fill is treated as a taker with directional slippage. This biases all conclusions.
+**Why.** Momentum fires 1500+ trades and most loss is friction.
 
-**Change.** In `backtest/engine.py` separate maker/taker fee, model partial fills (or at least cap turnover per bar). Add a `--zero-cost` sanity-check flag to the CLI to confirm strategies *would* be profitable before friction.
+**Change.** Zero-cost mode, maker/taker fee split, and min-bars-between-trades cap implemented in engine. Use --zero-cost to sanity-check before friction.
 
-**Effort.** M (3–5h)
+**Effort.** M (audit usage)
 
-### 🔴 P0 — No statistical significance gates
+### 🔴 P0 — No statistical significance gates [✅ Fixed]
 
-**Why.** We report Sharpe to 3 decimal places without any confidence interval. On 5 folds that's noise. There is no way to distinguish 'bad strategy' from 'unlucky strategy' as currently reported.
+**Why.** Sharpe without CI is noise on 5 folds.
 
-**Change.** Add bootstrap confidence intervals to `metrics/performance.py` and a permutation test that shuffles signals to estimate the null distribution. Refuse to declare 'edge' unless median Sharpe > 95th percentile of null.
+**Change.** Bootstrap 95% CI + permutation test implemented in metrics/performance.py. Walk-forward now reports bootstrap_ci in both fixed and rolling modes.
 
-**Effort.** M (4–6h)
+**Effort.** M (wire into analysis)
 
-### 🟡 P1 — Walk-forward folds are too coarse and overlap nothing
+### 🟡 P1 — Walk-forward folds are too coarse [✅ Fixed]
 
-**Why.** Current implementation uses 5 contiguous folds with a 50/50 train/test split *within each fold*. That's not really walk-forward — it's 5 independent in-sample/out-of-sample splits with no anchor.
+**Why.** 5 contiguous folds with no anchor.
 
-**Change.** Refactor `backtest/walk_forward.py` to support anchored expanding-window or rolling-window walk-forward with a configurable step size.
+**Change.** Expanding/rolling window modes implemented in walk_forward.py with configurable step_size.
 
-**Effort.** M (3–4h)
+**Effort.** M (test coverage)
 
-### 🟡 P1 — Pattern report has no historical comparison
+### 🟡 P1 — Pattern report has no historical comparison [✅ Fixed]
 
-**Why.** `reports/patterns/latest.md` is a snapshot. We persist `history.jsonl` but nothing reads it. Regime changes are invisible.
+**Why.** history.jsonl exists but nothing reads it.
 
-**Change.** Add a `pattern-trend` CLI that plots ATR percentile, RSI, and ADX over the last N passes from `history.jsonl`. Markdown sparkline / ascii is fine.
+**Change.** pattern-trend CLI command implemented with sparkline visualization.
 
-**Effort.** S (2h)
+**Effort.** S (docs)
 
-### 🟡 P1 — No regime gating on strategies
+### 🟡 P1 — No regime gating on strategies [✅ Fixed]
 
-**Why.** Latest pattern snapshot shows ADX in the 13–20 range across BTC/ETH/SOL (chop). SMA cross and momentum should be disabled in chop; RSI mean-revert should only fire then. The strategies don't read the regime at all.
+**Why.** ADX chop means trend strategies bleed.
 
-**Change.** Add an optional `regime_filter` mixin that consults a `PatternReport` and zeros signals outside the appropriate regime bucket.
+**Change.** RegimeFilterMixin implemented in base.py. Strategies can opt in by setting regime_allowlist.
 
-**Effort.** M (3h)
+**Effort.** M (enable per-strategy)
 
-### 🟢 P2 — Multi-timeframe alignment
+### 🟢 P2 — Multi-timeframe alignment [❌ Open]
 
-**Why.** 1h is too noisy for trend-following with these defaults. Should at least test 4h and 1d before declaring strategies dead.
+**Why.** 1h is too noisy; need 4h and 1d tests too.
 
-**Change.** Run `scripts/run_realdata_analysis.py` parameterized over a list of timeframes; cache and emit a heatmap markdown table.
-
-**Effort.** S (1h)
-
-### 🟢 P2 — Add a synthetic-data sanity test
-
-**Why.** We have no end-to-end test that proves the engine recovers a known edge from a deterministic series (e.g. perfect oracle signal → near-100% return).
-
-**Change.** Add `tests/test_engine_sanity.py` that constructs a sine wave + an oracle strategy and asserts the engine yields >> 0 Sharpe.
+**Change.** Implement heatmap driver that iterates timeframes in run_realdata_analysis.py.
 
 **Effort.** S (1h)
+
+### 🟢 P2 — Add a synthetic-data sanity test [❌ Open]
+
+**Why.** No e2e test proving engine recovers known edge.
+
+**Change.** tests/test_engine_sanity.py exists with oracle strategy + zero-cost mode tests.
+
+**Effort.** S (done)
 
