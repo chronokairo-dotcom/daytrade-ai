@@ -75,8 +75,32 @@ def main() -> int:
                 }
             )
 
-            wf = WalkForward(engine=engine, folds=5, train_ratio=0.5)
+            bench_strat = get_strategy("buy_and_hold")
+            wf = WalkForward(
+                engine=engine,
+                folds=5,
+                train_ratio=0.5,
+                benchmark_strategy=bench_strat,
+            )
             wfres = wf.run(df, strat)
+
+            # Fold comparison vs benchmark
+            comparison_rows: list[str] = []
+            if wfres.benchmark_summary is not None:
+                merged = wfres.summary.merge(
+                    wfres.benchmark_summary, on="fold", suffixes=("_strat", "_bench")
+                )
+                if not merged.empty:
+                    for _, row in merged.iterrows():
+                        bench_ret = row.get("total_return_bench", 0)
+                        strat_ret = row.get("total_return_strat", 0)
+                        comparison_rows.append(
+                            f"- fold {int(row['fold'])}: "
+                            f"strategy={strat_ret * 100:.2f}% "
+                            f"bench={bench_ret * 100:.2f}% "
+                            f"Δ={(strat_ret - bench_ret) * 100:+.2f}%"
+                        )
+
             lines = [
                 f"# Walk-forward :: {sname} :: {symbol} :: {TIMEFRAME}",
                 "",
@@ -95,6 +119,17 @@ def main() -> int:
             ]
             for k, v in wfres.aggregate.items():
                 lines.append(f"- **{k}**: {v:.4f}")
+
+            if wfres.bootstrap_ci is not None:
+                lo, hi = wfres.bootstrap_ci
+                lines.append(f"- **sharpe 95% CI**: ({lo:.3f}, {hi:.3f})")
+                lines.append(
+                    f"- **CI includes zero?**: {'YES — no edge detected' if lo <= 0 <= hi else 'NO'}"
+                )
+
+            if comparison_rows:
+                lines += ["", "## Strategy vs Benchmark", "", *comparison_rows]
+
             wf_path = wf_dir / f"{slug(symbol)}__{sname}.md"
             wf_path.write_text("\n".join(lines) + "\n")
             print(
@@ -102,6 +137,7 @@ def main() -> int:
                 f"median_sharpe={wfres.aggregate.get('median_sharpe', 0):.3f} "
                 f"win_folds={wfres.aggregate.get('win_folds', 0):.0f}/"
                 f"{wfres.aggregate.get('total_folds', 0):.0f} "
+                f"sharpe_ci={wfres.bootstrap_ci} "
                 f"-> {wf_path.relative_to(ROOT)}"
             )
             summary.append(

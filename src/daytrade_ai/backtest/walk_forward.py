@@ -90,12 +90,19 @@ class WalkForward:
         benchmark_summary = pd.DataFrame(bench_rows) if bench_rows else None
         aggregate = self._compute_aggregate(summary)
 
+        sharpes = summary["sharpe"].dropna().to_numpy(dtype=float)
+        if len(sharpes) >= 4:
+            ci = bootstrap_sharpe_ci(sharpes, n_resamples=2000, seed=42)
+        else:
+            ci = (float(sharpes.mean()), float(sharpes.mean())) if len(sharpes) else (0.0, 0.0)
+
         return WalkForwardResult(
             fold_results=results,
             summary=summary,
             aggregate=aggregate,
             benchmark_fold_results=bench_results or None,
             benchmark_summary=benchmark_summary,
+            bootstrap_ci=ci,
         )
 
     def _run_rolling_anchored(self, df: pd.DataFrame, strategy: Strategy) -> WalkForwardResult:
