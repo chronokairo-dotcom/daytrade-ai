@@ -1,6 +1,6 @@
 # daytrade-ai :: morning report
 
-_generated: 2026-06-11T17:11:12+00:00_
+_generated: 2026-06-12T08:00:04+00:00_
 
 > **PAPER ONLY.** This report describes research-grade backtests on cached
 > Binance public OHLCV data. No live orders. No claims of profitability.
@@ -38,11 +38,11 @@ _generated: 2026-06-11T17:11:12+00:00_
 
 ### Pattern report :: latest snapshot
 
-_generated: 2026-06-11T17:03:47+00:00_
+_generated: 2026-06-12T07:33:50+00:00_
 
 ### Pattern report :: BTC/USDT :: 1h
 
-_generated: 2026-06-11T17:03:47.557550+00:00_
+_generated: 2026-06-12T07:33:50.359372+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
@@ -91,7 +91,7 @@ _generated: 2026-06-11T17:03:47.557550+00:00_
 
 ### Pattern report :: ETH/USDT :: 1h
 
-_generated: 2026-06-11T17:03:47.576733+00:00_
+_generated: 2026-06-12T07:33:50.379817+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
@@ -140,7 +140,7 @@ _generated: 2026-06-11T17:03:47.576733+00:00_
 
 ### Pattern report :: SOL/USDT :: 1h
 
-_generated: 2026-06-11T17:03:47.595824+00:00_
+_generated: 2026-06-12T07:33:50.399366+00:00_
 
 - bars: **720**
 - range: 2026-04-01 04:00:00+00:00 → 2026-05-01 03:00:00+00:00
